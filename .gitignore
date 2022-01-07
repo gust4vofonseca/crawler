@@ -1,0 +1,16 @@
+node_modules
+coverage
+dist
+
+tjs/*/*/*
+!tjs/*/*/.gitkeep
+!tjs/se/cookies/jwt
+
+.DS_Store
+.env
+
+yarn.lock
+yarn-error.log
+
+logs/*
+!logs/.gitkeep
