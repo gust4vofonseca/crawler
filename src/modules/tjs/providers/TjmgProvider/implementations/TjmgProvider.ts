@@ -217,7 +217,7 @@ export class TjmgProvider implements ITjmgProvider {
 
         // Criar e salvar CSV
         const csvWriter =
-          init > 0
+          id > 0
             ? createObjectCsvWriter({
                 path: path.resolve(tjmgPath, 'uploads', nameCSV),
                 header: headerListMG,
@@ -233,8 +233,6 @@ export class TjmgProvider implements ITjmgProvider {
               });
 
         await csvWriter.writeRecords([process]);
-
-        init++;
 
         const csvWriter2 =
           init > 0
@@ -253,6 +251,9 @@ export class TjmgProvider implements ITjmgProvider {
               });
 
         await csvWriter2.writeRecords([process]);
+        if (init === 0) {
+          init++;
+        }
       }
     }
   }
@@ -316,7 +317,6 @@ export class TjmgProvider implements ITjmgProvider {
       }
     }
 
-    let init = 0;
     for (const search of searchs) {
       const pageChronologicalList = await this.curl.post(
         'http://www8.tjmg.jus.br/juridico/pe/listaCronologia.jsf',
@@ -414,7 +414,7 @@ export class TjmgProvider implements ITjmgProvider {
 
         // Criar e salvar CSV
         const csvWriter =
-          init > 0
+          id > 0
             ? createObjectCsvWriter({
                 path: path.resolve(tjmgPath, 'uploads2', nameCSV),
                 header: headerListMG,
@@ -430,8 +430,6 @@ export class TjmgProvider implements ITjmgProvider {
               });
 
         await csvWriter.writeRecords([process]);
-
-        init++;
       }
     }
   }
