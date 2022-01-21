@@ -1,0 +1,17 @@
+export const headerListRS = [
+  { id: 'NProcess', title: 'Numero do Processo' },
+  { id: 'plotType', title: 'Tipo de Parcela' },
+  { id: 'court', title: 'Tribunal de Origem' },
+  { id: 'situation', title: 'Situação' },
+  { id: 'fileType', title: 'Ação' },
+  { id: 'date', title: 'Data de Apresentação:' },
+  { id: 'administrativeProcess', title: 'Processo Administrativo:' },
+  { id: 'value', title: 'Valor do Precatório:' },
+  { id: 'origin', title: 'Origem:' },
+  { id: 'payer', title: 'Pagador:' },
+  { id: 'lawyers', title: 'Advogado(s):' },
+  { id: 'object', title: 'Objeto:' },
+  { id: 'correspondingBudget', title: 'Orçamento Correspondente:' },
+  { id: 'localization', title: 'Localização' },
+  { id: 'position', title: 'Posição na Fila' },
+];
