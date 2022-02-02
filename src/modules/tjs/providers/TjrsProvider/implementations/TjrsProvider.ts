@@ -62,7 +62,9 @@ export class TjrsProvider implements ITjrsProvider {
       i++;
     }
 
+    let debtorIndex = 0;
     for (const nameDebtor of namesDebtor) {
+      debtorIndex++;
       console.log(nameDebtor);
       await this.curl.get(
         'https://www.tjrs.jus.br/novo/processos-e-servicos/precatorios-e-rpv/pesquisa-de-precatorios/',
@@ -117,24 +119,25 @@ export class TjrsProvider implements ITjrsProvider {
       ) {
         numberPages.push('1');
       }
-      let pageId = 4201;
-      let index = 1;
+      let pageId = 1;
+      let index = 0;
       if (nameDebtor.name === 'Estado+do+Rio+Grande+do+Sul') {
+        console.log(debtorIndex);
         for (const numberPage of numberPages) {
-          // if (numberPage !== '1') {
-          pageId += 100;
-          const name = nameDebtor.name.replace(/\+/g, '');
-          const dataPageChange = await this.curl.get(
-            `https://www.tjrs.jus.br/site_php/precatorios/lista_precatorios_entidades.php?cod_devedor=${nameDebtor.entity}&seq=${pageId}&incremento_de_seq=100&entidade=${nameDebtor.entity}&nome_entidade=${name}&qtd_precatorios=${numberPrecatories}`,
-            {
-              COOKIEJAR: this.cookiesPath,
-              COOKIEFILE: this.cookiesPath,
-            },
-          );
-          dataPage = replaceStringForHTMLaccentuation(
-            dataPageChange.data.toString(),
-          );
-          // }
+          if (numberPage !== '1') {
+            pageId += 100;
+            const name = nameDebtor.name.replace(/\+/g, '');
+            const dataPageChange = await this.curl.get(
+              `https://www.tjrs.jus.br/site_php/precatorios/lista_precatorios_entidades.php?cod_devedor=${nameDebtor.entity}&seq=${pageId}&incremento_de_seq=100&entidade=${nameDebtor.entity}&nome_entidade=${name}&qtd_precatorios=${numberPrecatories}`,
+              {
+                COOKIEJAR: this.cookiesPath,
+                COOKIEFILE: this.cookiesPath,
+              },
+            );
+            dataPage = replaceStringForHTMLaccentuation(
+              dataPageChange.data.toString(),
+            );
+          }
           console.log(pageId);
 
           let pageInformation = [];
@@ -144,7 +147,7 @@ export class TjrsProvider implements ITjrsProvider {
 
           let id = 0;
           for (const info of pageInformation) {
-            if (id !== 0 && id !== pageInformation.length - 1) {
+            if (id !== 0 && id !== pageInformation.length) {
               const process: ITJRSList = {
                 NProcess: '',
                 plotType: '',

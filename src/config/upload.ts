@@ -8,6 +8,8 @@ interface tjUploadConfig {
 
 export const tjmgPath = path.resolve(__dirname, '..', '..', 'tjs', 'mg');
 
+export const tjmsPath = path.resolve(__dirname, '..', '..', 'tjs', 'ms');
+
 export const tjrsPath = path.resolve(__dirname, '..', '..', 'tjs', 'rs');
 
 export function tjmgUploadConfig(): tjUploadConfig {
