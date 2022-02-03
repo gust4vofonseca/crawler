@@ -4,14 +4,14 @@ export interface ISearchMG {
   hinput: string;
 }
 export interface ITJMGList {
-  // chronologicalOrder: string;
-  // openSuspended: string;
-  // value: string;
+  chronologicalOrder: string;
+  openSuspended: string;
+  value: string;
   NProcess: string;
-  // NSEI: string;
-  // origin: string;
-  // action: string;
-  // saleOff: string;
-  // protocolDateTime: string;
-  // protocolNumberYear: string;
+  NSEI: string;
+  origin: string;
+  action: string;
+  saleOff: string;
+  protocolDateTime: string;
+  protocolNumberYear: string;
 }

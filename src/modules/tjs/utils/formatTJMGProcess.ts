@@ -1,7 +1,7 @@
 import { ITJMGList } from '../dtos/ITJMGProcess';
 
 export function formatChronologicalList(data: string, id: string): ITJMGList {
-  /* let chronologicalOrder = '';
+  let chronologicalOrder = '';
   if (data.includes('Ordem Cronológica')) {
     const [, getChronologicalOrder] = data.split(`Ordem Cronológica`);
     const [, getChronologicalOrder2] = getChronologicalOrder.split(
@@ -25,7 +25,7 @@ export function formatChronologicalList(data: string, id: string): ITJMGList {
       `id="resultado:${id}:j_idt58:valorFace">\n`,
     );
     [value] = getValue.split('<');
-  } */
+  }
 
   let NProcess = '';
   if (data.includes('Nº Processo')) {
@@ -35,7 +35,6 @@ export function formatChronologicalList(data: string, id: string): ITJMGList {
     [NProcess] = getNProcess.split('<');
   }
 
-  /*
   let NSEI = '';
   if (data.includes('Nº SEI')) {
     const [, getNSEI] = data.split(
@@ -78,26 +77,26 @@ export function formatChronologicalList(data: string, id: string): ITJMGList {
       `id="resultado:${id}:j_idt58:protocoloNumero">\n`,
     );
     [protocolNumberYear] = getProtocolNumberYear.split('<');
-  } */
+  }
 
   const process: ITJMGList = {
-    // chronologicalOrder,
-    // openSuspended,
-    // value,
+    chronologicalOrder,
+    openSuspended,
+    value,
     NProcess,
-    // NSEI,
-    // origin,
-    // action,
-    // saleOff,
-    // protocolDateTime,
-    // protocolNumberYear,
+    NSEI,
+    origin,
+    action,
+    saleOff,
+    protocolDateTime,
+    protocolNumberYear,
   };
 
   return process;
 }
 
 export function formatChronologicalList2(data: string, id: string): ITJMGList {
-  /* let chronologicalOrder = '';
+  let chronologicalOrder = '';
   if (data.includes('Ordem Cronológica')) {
     const [, getChronologicalOrder] = data.split(`Ordem Cronológica`);
     const [, getChronologicalOrder2] = getChronologicalOrder.split(
@@ -121,7 +120,7 @@ export function formatChronologicalList2(data: string, id: string): ITJMGList {
       `id="resultado:${id}:j_idt46:valorFace">\n`,
     );
     [value] = getValue.split('<');
-  } */
+  }
 
   let NProcess = '';
   if (data.includes('Nº Processo')) {
@@ -131,7 +130,6 @@ export function formatChronologicalList2(data: string, id: string): ITJMGList {
     [NProcess] = getNProcess.split('<');
   }
 
-  /*
   let NSEI = '';
   if (data.includes('Nº SEI')) {
     const [, getNSEI] = data.split(
@@ -174,19 +172,19 @@ export function formatChronologicalList2(data: string, id: string): ITJMGList {
       `id="resultado:${id}:j_idt46:protocoloNumero">\n`,
     );
     [protocolNumberYear] = getProtocolNumberYear.split('<');
-  } */
+  }
 
   const process: ITJMGList = {
-    // chronologicalOrder,
-    // openSuspended,
-    // value,
+    chronologicalOrder,
+    openSuspended,
+    value,
     NProcess,
-    // NSEI,
-    // origin,
-    // action,
-    // saleOff,
-    // protocolDateTime,
-    // protocolNumberYear,
+    NSEI,
+    origin,
+    action,
+    saleOff,
+    protocolDateTime,
+    protocolNumberYear,
   };
 
   return process;
