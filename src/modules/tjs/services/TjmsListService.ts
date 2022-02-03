@@ -11,10 +11,12 @@ export class TjmsListService {
     private csvProvider: ICSVProvider,
   ) {}
 
-  async execute(filename: string): Promise<void> {
-    const filePath = path.resolve(tjmsPath, 'uploads', filename);
+  async execute(): Promise<void> {
+    // const filePath = path.resolve(tjmsPath, 'uploads', filename);
 
-    const processNumbers = await this.csvProvider.read(filePath, 'utf8', ';');
+    await this.tjmsProvider.searchByChronologicalList();
+
+    /* const processNumbers = await this.csvProvider.read(filePath, 'utf8', ';');
     const data = [];
     let id = 0;
     for (let number of processNumbers) {
@@ -24,6 +26,6 @@ export class TjmsListService {
         await this.tjmsProvider.search(number, id);
         id++;
       }
-    }
+    } */
   }
 }

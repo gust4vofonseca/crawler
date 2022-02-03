@@ -4,7 +4,7 @@ import { app } from '@shared/infra/http/app';
 import { createConnections } from 'typeorm';
 
 createConnections().then(() => {
-  app.listen(4004, () => {
-    console.log('Server started on port 4004.');
+  app.listen(3005, () => {
+    console.log('Server started on port 3005.');
   });
 });

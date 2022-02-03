@@ -55,7 +55,7 @@ export class TjmsProvider implements ITjmsProvider {
           'formPesquisa:j_idt21': 'formPesquisa:j_idt21',
           formPesquisa: 'formPesquisa',
           'formPesquisa:j_idt17_focus': '',
-          'formPesquisa:j_idt17_input': '1',
+          'formPesquisa:j_idt17_input': 1,
           'formPesquisa:listaResultadoPesquisa:j_idt40:filter': '',
           'formPesquisa:listaResultadoPesquisa:j_idt44:filter': '',
           'formPesquisa:listaResultadoPesquisa:j_idt46:filter': '',
@@ -63,7 +63,7 @@ export class TjmsProvider implements ITjmsProvider {
           'formPesquisa:listaResultadoPesquisa:j_idt50:filter': '',
           'formPesquisa:listaResultadoPesquisa:j_idt54:filter': '',
           'formPesquisa:listaResultadoPesquisa:j_idt62:filter': '',
-          'javax.faces.ViewState': `${viewState}`,
+          'javax.faces.ViewState': viewState,
         }),
         COOKIEFILE: this.cookiesPath,
         COOKIEJAR: this.cookiesPath,
@@ -71,7 +71,7 @@ export class TjmsProvider implements ITjmsProvider {
     );
 
     await fs.promises.writeFile(
-      path.resolve(tjmsPath, 'paginaPDFs.xhtml.pdf'),
+      path.resolve(tjmsPath, 'paginaPDFs.html'),
       processPage.data,
       {
         encoding: 'utf8',
