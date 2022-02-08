@@ -7,6 +7,8 @@ import { CSVProvider } from '@modules/files/providers/implementations/CSVProvide
 
 export class TjmsListController {
   async handle(request: Request, response: Response): Promise<void> {
+    const { filename } = request.file;
+
     await ResponseJSON(request, response);
 
     const tjmsProvider = new TjmsProvider();
@@ -21,6 +23,6 @@ export class TjmsListController {
       csvProvider,
     );
 
-    await tjmsService.execute();
+    await tjmsService.execute(filename);
   }
 }

@@ -11,10 +11,11 @@ export class TjmsListService {
     private csvProvider: ICSVProvider,
   ) {}
 
-  async execute(): Promise<void> {
-    // const filePath = path.resolve(tjmsPath, 'uploads', filename);
+  async execute(filename: string): Promise<void> {
+    const filePath = path.resolve(tjmsPath, 'uploads', filename);
 
-    await this.tjmsProvider.searchByChronologicalList();
+    // await this.tjmsProvider.searchByChronologicalList();
+    await this.tjmsProvider.search(filePath);
 
     /* const processNumbers = await this.csvProvider.read(filePath, 'utf8', ';');
     const data = [];

@@ -1,17 +1,7 @@
 export interface ITJMSList {
+  NKnowledge1: string;
+  NKnowledge2: string;
   NProcess: string;
-  plotType: string;
-  court: string;
-  situation: string;
-  fileType: string;
-  date: string;
-  administrativeProcess: string;
-  value: string;
-  origin: string;
-  payer: string;
-  lawyers: string;
-  object: string;
-  correspondingBudget: string;
-  localization: string;
-  position: string;
+  county: string;
+  year: string;
 }
