@@ -97,6 +97,7 @@ export class TjmgProvider implements ITjmgProvider {
 
     let init = 0;
     for (const search of searchs) {
+      console.log(search.input);
       const pageChronologicalList = await this.curl.post(
         'http://www8.tjmg.jus.br/juridico/pe/consultaPorEntidadeDevedora.jsf',
         {
@@ -218,14 +219,14 @@ export class TjmgProvider implements ITjmgProvider {
         const csvWriter =
           id > 0
             ? createObjectCsvWriter({
-                path: path.resolve(tjmgPath, 'uploads', nameCSV),
+                path: path.resolve(tjmgPath, 'uploads', `08-02-22-${nameCSV}`),
                 header: headerListMG,
                 fieldDelimiter: ';',
                 encoding: 'latin1',
                 append: true,
               })
             : createObjectCsvWriter({
-                path: path.resolve(tjmgPath, 'uploads', nameCSV),
+                path: path.resolve(tjmgPath, 'uploads', `08-02-22-${nameCSV}`),
                 header: headerListMG,
                 fieldDelimiter: ';',
                 encoding: 'latin1',
@@ -317,6 +318,7 @@ export class TjmgProvider implements ITjmgProvider {
     }
 
     for (const search of searchs) {
+      console.log(search.input);
       const pageChronologicalList = await this.curl.post(
         'http://www8.tjmg.jus.br/juridico/pe/listaCronologia.jsf',
         {
@@ -415,14 +417,14 @@ export class TjmgProvider implements ITjmgProvider {
         const csvWriter =
           id > 0
             ? createObjectCsvWriter({
-                path: path.resolve(tjmgPath, 'uploads2', nameCSV),
+                path: path.resolve(tjmgPath, 'uploads2', `08-02-22-${nameCSV}`),
                 header: headerListMG,
                 fieldDelimiter: ';',
                 encoding: 'latin1',
                 append: true,
               })
             : createObjectCsvWriter({
-                path: path.resolve(tjmgPath, 'uploads2', nameCSV),
+                path: path.resolve(tjmgPath, 'uploads2', `08-02-22-${nameCSV}`),
                 header: headerListMG,
                 fieldDelimiter: ';',
                 encoding: 'latin1',

@@ -64,8 +64,9 @@ export class TjrsProvider implements ITjrsProvider {
 
     let debtorIndex = 0;
     for (const nameDebtor of namesDebtor) {
+      console.log(nameDebtor.name);
+      console.log(debtorIndex);
       debtorIndex++;
-      console.log(nameDebtor);
       await this.curl.get(
         'https://www.tjrs.jus.br/novo/processos-e-servicos/precatorios-e-rpv/pesquisa-de-precatorios/',
         {
@@ -119,12 +120,11 @@ export class TjrsProvider implements ITjrsProvider {
       ) {
         numberPages.push('1');
       }
-      let pageId = 1;
-      let index = 0;
-      if (nameDebtor.name === 'Estado+do+Rio+Grande+do+Sul') {
-        console.log(debtorIndex);
+      let pageId = 34901;
+      let index = 1;
+      if (debtorIndex > 36) {
         for (const numberPage of numberPages) {
-          if (numberPage !== '1') {
+          // if (numberPage !== '1') {
             pageId += 100;
             const name = nameDebtor.name.replace(/\+/g, '');
             const dataPageChange = await this.curl.get(
@@ -137,7 +137,7 @@ export class TjrsProvider implements ITjrsProvider {
             dataPage = replaceStringForHTMLaccentuation(
               dataPageChange.data.toString(),
             );
-          }
+          // }
           console.log(pageId);
 
           let pageInformation = [];
@@ -295,14 +295,22 @@ export class TjrsProvider implements ITjrsProvider {
               const csvWriter =
                 index > 1
                   ? createObjectCsvWriter({
-                      path: path.resolve(tjrsPath, 'uploads', nameCSV),
+                      path: path.resolve(
+                        tjrsPath,
+                        'uploads',
+                        `08-02-22-${nameCSV}`,
+                      ),
                       header: headerListRS,
                       fieldDelimiter: ';',
                       encoding: 'latin1',
                       append: true,
                     })
                   : createObjectCsvWriter({
-                      path: path.resolve(tjrsPath, 'uploads', nameCSV),
+                      path: path.resolve(
+                        tjrsPath,
+                        'uploads',
+                        `08-02-22-${nameCSV}`,
+                      ),
                       header: headerListRS,
                       fieldDelimiter: ';',
                       encoding: 'latin1',

@@ -15,7 +15,10 @@ export class TjmsListService {
     const filePath = path.resolve(tjmsPath, 'uploads', filename);
 
     // await this.tjmsProvider.searchByChronologicalList();
-    await this.tjmsProvider.search(filePath);
+    const processNumbers = await this.csvProvider.read(filePath, 'utf8', ';');
+    for (const number of processNumbers) {
+      await this.tjmsProvider.search(number);
+    }
 
     /* const processNumbers = await this.csvProvider.read(filePath, 'utf8', ';');
     const data = [];

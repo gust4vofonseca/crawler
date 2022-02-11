@@ -89,7 +89,7 @@ export class TjmsProvider implements ITjmsProvider {
     );
   }
 
-  async search(filepath: string): Promise<void> {
+  async search2(filepath: string): Promise<void> {
     try {
       let pdfData = '';
       const pdf_path = path.resolve(filepath);
@@ -239,31 +239,7 @@ export class TjmsProvider implements ITjmsProvider {
     }
   }
 
-  async search2(number: string, id: number): Promise<void> {
-    const [process] = number.split('/');
-
-    const verificate = process.replace(/\D/g, '');
-
-    if (verificate.length > 10 && !isNaN(Number(verificate))) {
-      const NProcess = { process };
-
-      const csvWriter =
-        id > 0
-          ? createObjectCsvWriter({
-              path: path.resolve(tjmsPath, 'uploads', 'lista.csv'),
-              header: headerListMS,
-              fieldDelimiter: ';',
-              encoding: 'latin1',
-              append: true,
-            })
-          : createObjectCsvWriter({
-              path: path.resolve(tjmsPath, 'uploads', 'lista.csv'),
-              header: headerListMS,
-              fieldDelimiter: ';',
-              encoding: 'latin1',
-            });
-
-      await csvWriter.writeRecords([NProcess]);
-    }
+  async search(filepath: string): Promise<void> {
+    console.log(filepath);
   }
 }

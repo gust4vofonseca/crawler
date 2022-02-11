@@ -10,7 +10,7 @@ export class TjmgListService {
   ) {}
 
   async execute(): Promise<void> {
-    // await this.tjmgProvider.searchByChronologicalList();
+    await this.tjmgProvider.searchByChronologicalList();
     await this.tjmgProvider.searchByChronologicalList2();
   }
 }
