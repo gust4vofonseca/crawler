@@ -14,6 +14,8 @@ export const tjrsPath = path.resolve(__dirname, '..', '..', 'tjs', 'rs');
 
 export const tjroPath = path.resolve(__dirname, '..', '..', 'tjs', 'ro');
 
+export const tjapPath = path.resolve(__dirname, '..', '..', 'tjs', 'ap');
+
 export function tjmgUploadConfig(): tjUploadConfig {
   const uploadConfig = {
     storage: multer.diskStorage({

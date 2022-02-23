@@ -7,6 +7,7 @@ import { TjmgListController } from '../controllers/TjmgListController';
 import { TjrsListController } from '../controllers/TjrsListController';
 import { TjmsListController } from '../controllers/TjmsListController';
 import { TjroListController } from '../controllers/TjroListController';
+import { TjapListController } from '../controllers/TjapListController';
 
 const tjsRouter = Router();
 
@@ -15,6 +16,7 @@ const uploadTjms = multer(tjmsUploadConfig());
 const tjmgListController = new TjmgListController();
 const tjrsListController = new TjrsListController();
 const tjroListController = new TjroListController();
+const tjapListController = new TjapListController();
 const tjmsListController = new TjmsListController();
 
 tjsRouter.get('/minas_gerais', tjmgListController.handle);
@@ -24,5 +26,7 @@ tjsRouter.get('/rio_grande_do_sul', tjrsListController.handle);
 tjsRouter.post('/ms', uploadTjms.single('file'), tjmsListController.handle);
 
 tjsRouter.get('/ro', tjroListController.handle);
+
+tjsRouter.get('/ap', tjapListController.handle);
 
 export { tjsRouter };

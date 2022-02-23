@@ -64,67 +64,68 @@ export class TjrsProvider implements ITjrsProvider {
 
     let debtorIndex = 0;
     for (const nameDebtor of namesDebtor) {
-      console.log(nameDebtor.name);
-      console.log(debtorIndex);
       debtorIndex++;
-      await this.curl.get(
-        'https://www.tjrs.jus.br/novo/processos-e-servicos/precatorios-e-rpv/pesquisa-de-precatorios/',
-        {
-          COOKIEJAR: this.cookiesPath,
-          COOKIEFILE: this.cookiesPath,
-        },
-      );
-      const pageInitial = await this.curl.post(
-        'https://www.tjrs.jus.br/site_php/precatorios/lista_precatorios_entidades.php',
-        {
-          postFields: querystring.stringify({
-            aba_opcao_consulta: 'entidades',
-            entidade: nameDebtor.entity,
-            nome_entidade: nameDebtor.name,
-          }),
-          COOKIEJAR: this.cookiesPath,
-          COOKIEFILE: this.cookiesPath,
-        },
-      );
-
-      let dataPage = replaceStringForHTMLaccentuation(
-        pageInitial.data.toString(),
-      );
-
-      const numberPages = [];
-      let numberPrecatories = '';
-      if (
-        dataPage.includes(
-          `entidade=${nameDebtor.entity}&nome_entidade=${nameDebtor.name}&qtd_precatorios=`,
-        )
-      ) {
-        const getPages = dataPage.split(
-          `entidade=${nameDebtor.entity}&nome_entidade=${nameDebtor.name}&qtd_precatorios=`,
+      if (debtorIndex > 582) {
+        console.log(nameDebtor.name);
+        console.log(debtorIndex);
+        await this.curl.get(
+          'https://www.tjrs.jus.br/novo/processos-e-servicos/precatorios-e-rpv/pesquisa-de-precatorios/',
+          {
+            COOKIEJAR: this.cookiesPath,
+            COOKIEFILE: this.cookiesPath,
+          },
         );
-        [numberPrecatories] = getPages[1].split(`">`);
-        let cont = 0;
-        for (const getPage of getPages) {
-          if (cont > 0) {
-            const [, getNumber] = getPage.split(`">`);
-            const [number] = getNumber.split(`<`);
-            numberPages.push(number);
-          }
-          cont++;
-        }
-      }
+        const pageInitial = await this.curl.post(
+          'https://www.tjrs.jus.br/site_php/precatorios/lista_precatorios_entidades.php',
+          {
+            postFields: querystring.stringify({
+              aba_opcao_consulta: 'entidades',
+              entidade: nameDebtor.entity,
+              nome_entidade: nameDebtor.name,
+            }),
+            COOKIEJAR: this.cookiesPath,
+            COOKIEFILE: this.cookiesPath,
+          },
+        );
 
-      if (
-        !dataPage.includes(
-          `entidade=${nameDebtor.entity}&nome_entidade=${nameDebtor.name}&qtd_precatorios=`,
-        )
-      ) {
-        numberPages.push('1');
-      }
-      let pageId = 34901;
-      let index = 1;
-      if (debtorIndex > 36) {
+        let dataPage = replaceStringForHTMLaccentuation(
+          pageInitial.data.toString(),
+        );
+
+        const numberPages = [];
+        let numberPrecatories = '';
+        if (
+          dataPage.includes(
+            `entidade=${nameDebtor.entity}&nome_entidade=${nameDebtor.name}&qtd_precatorios=`,
+          )
+        ) {
+          const getPages = dataPage.split(
+            `entidade=${nameDebtor.entity}&nome_entidade=${nameDebtor.name}&qtd_precatorios=`,
+          );
+          [numberPrecatories] = getPages[1].split(`">`);
+          let cont = 0;
+          for (const getPage of getPages) {
+            if (cont > 0) {
+              const [, getNumber] = getPage.split(`">`);
+              const [number] = getNumber.split(`<`);
+              numberPages.push(number);
+            }
+            cont++;
+          }
+        }
+
+        if (
+          !dataPage.includes(
+            `entidade=${nameDebtor.entity}&nome_entidade=${nameDebtor.name}&qtd_precatorios=`,
+          )
+        ) {
+          numberPages.push('1');
+        }
+        let pageId = 1;
+        let index = 1;
+      // if (debtorIndex > 106) {
         for (const numberPage of numberPages) {
-          // if (numberPage !== '1') {
+          if (numberPage !== '1') {
             pageId += 100;
             const name = nameDebtor.name.replace(/\+/g, '');
             const dataPageChange = await this.curl.get(
@@ -137,7 +138,7 @@ export class TjrsProvider implements ITjrsProvider {
             dataPage = replaceStringForHTMLaccentuation(
               dataPageChange.data.toString(),
             );
-          // }
+          }
           console.log(pageId);
 
           let pageInformation = [];
