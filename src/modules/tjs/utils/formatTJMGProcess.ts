@@ -1,6 +1,10 @@
 import { ITJMGList } from '../dtos/ITJMGProcess';
 
-export function formatChronologicalList(data: string, id: string): ITJMGList {
+export function formatChronologicalList(
+  data: string,
+  data2: string,
+  id: string,
+): ITJMGList {
   let chronologicalOrder = '';
   if (data.includes('Ordem Cronológica')) {
     const [, getChronologicalOrder] = data.split(`Ordem Cronológica`);
@@ -79,6 +83,19 @@ export function formatChronologicalList(data: string, id: string): ITJMGList {
     [protocolNumberYear] = getProtocolNumberYear.split('<');
   }
 
+  const acronyms = [];
+  if (data2.includes(`Beneficiários`)) {
+    const getBene = data2.split(`j_idt147" class="ui-outputlabel">`);
+    let i = 0;
+    for (const getData of getBene) {
+      if (i > 0) {
+        const [getAcronyms] = getData.split('<');
+        acronyms.push(getAcronyms);
+      }
+      i++;
+    }
+  }
+
   const process: ITJMGList = {
     chronologicalOrder,
     openSuspended,
@@ -90,12 +107,17 @@ export function formatChronologicalList(data: string, id: string): ITJMGList {
     saleOff,
     protocolDateTime,
     protocolNumberYear,
+    acronyms,
   };
 
   return process;
 }
 
-export function formatChronologicalList2(data: string, id: string): ITJMGList {
+export function formatChronologicalList2(
+  data: string,
+  data2: string,
+  id: string,
+): ITJMGList {
   let chronologicalOrder = '';
   if (data.includes('Ordem Cronológica')) {
     const [, getChronologicalOrder] = data.split(`Ordem Cronológica`);
@@ -174,6 +196,19 @@ export function formatChronologicalList2(data: string, id: string): ITJMGList {
     [protocolNumberYear] = getProtocolNumberYear.split('<');
   }
 
+  const acronyms = [];
+  if (data2.includes(`Beneficiários`)) {
+    const getBene = data2.split(`j_idt147" class="ui-outputlabel">`);
+    let i = 0;
+    for (const getData of getBene) {
+      if (i > 0) {
+        const [getAcronyms] = getData.split('<');
+        acronyms.push(getAcronyms);
+      }
+      i++;
+    }
+  }
+
   const process: ITJMGList = {
     chronologicalOrder,
     openSuspended,
@@ -185,6 +220,7 @@ export function formatChronologicalList2(data: string, id: string): ITJMGList {
     saleOff,
     protocolDateTime,
     protocolNumberYear,
+    acronyms,
   };
 
   return process;

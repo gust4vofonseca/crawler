@@ -63,7 +63,14 @@ export class TjroProvider implements ITjroProvider {
     for (const searchEntities of dataSearchEntities) {
       if (searchEntities.numberSearch !== '0') {
         console.log(searchEntities.nameSearch);
-        const nameCSV = `${searchEntities.nameSearch.replace('/', '-')}.csv`;
+
+        const today = new Date();
+        const currentDate = `${today.getDate()}-${today.getMonth()}-${today.getFullYear()}-`;
+        const nameCSV = `${currentDate}${searchEntities.nameSearch.replace(
+          '/',
+          '-',
+        )}.csv`;
+
         const data = await this.curl.post(
           'https://webapp.tjro.jus.br/apprec/pages/consultadevedor.xhtml',
           {
@@ -285,11 +292,3 @@ export class TjroProvider implements ITjroProvider {
     }
   }
 }
-
-/* await fs.promises.writeFile(
-      path.resolve(tjroPath, 'paginaPDFs.html'),
-      page.data,
-      {
-        encoding: 'utf8',
-      },
-    ); */

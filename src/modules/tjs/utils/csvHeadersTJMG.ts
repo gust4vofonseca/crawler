@@ -1,4 +1,5 @@
 export const headerListMG = [
+  { id: 'acronyms', title: 'siglas' },
   { id: 'chronologicalOrder', title: 'Ordem Cronológica' },
   { id: 'openSuspended', title: 'Ordem Aberto/Suspenso' },
   { id: 'value', title: 'Valor de formação do Precatório (Valor de Face)' },

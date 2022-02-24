@@ -3,7 +3,7 @@ import { curly, CurlyFunction } from 'node-libcurl';
 import path from 'path';
 import iconv from 'iconv-lite';
 import { tjmgPath } from '@config/upload';
-import { ISearchMG } from '@modules/tjs/dtos/ITJMGProcess';
+import { ISearchMG, ITJMGList } from '@modules/tjs/dtos/ITJMGProcess';
 import {
   formatChronologicalList,
   formatChronologicalList2,
@@ -26,9 +26,8 @@ export class TjmgProvider implements ITjmgProvider {
         : curly.create({ SSL_VERIFYPEER: false });
   }
 
-  // Lista cronologica
-
   async searchByChronologicalList(): Promise<void> {
+    console.log('Aqui');
     const pageInitial = await this.curl.get(
       'http://www8.tjmg.jus.br/juridico/pe/consultaPorEntidadeDevedora.jsf',
       {
@@ -210,47 +209,80 @@ export class TjmgProvider implements ITjmgProvider {
 
         const pagePDF = iconv.decode(pageInformation.data, 'ISO-8859-1');
 
-        // Formatar Informações
-        const process = formatChronologicalList(pagePDF, id.toString());
+        const pageInformation2 = await this.curl.post(
+          'http://www8.tjmg.jus.br/juridico/pe/consultaPorEntidadeDevedora.jsf',
+          {
+            POSTFIELDS: querystring.stringify({
+              'javax.faces.partial.ajax': 'true',
+              'javax.faces.source': `resultado:${id}:nprecatorio`,
+              'javax.faces.partial.execute': '@all',
+              'javax.faces.partial.render': 'frm_detalhe',
+              [`resultado:${id}:nprecatorio`]: `resultado:${id}:nprecatorio`,
+              frm_pesquisa: 'frm_pesquisa',
+              entidade_devedora_input: search.input,
+              entidade_devedora_hinput: search.hinput,
+              ocultaFechados_input: '1',
+              ocultaFechados_focus: '',
+              numero_precatorio: '',
+              tipo_precatorio_input: '-1',
+              tipo_precatorio_focus: '',
+              anoInicio: '',
+              anoFim: '',
+              numeroProcessoExecucao: '',
+              numeroSEI: '',
+              nomeBeneficiario: '',
+              'javax.faces.ViewState': viewState,
+            }),
+            COOKIEJAR: this.cookiesPath,
+            COOKIEFILE: this.cookiesPath,
+          },
+        );
 
-        const nameCSV = `${search.input.replace('/', '-')}.csv`;
+        const pagePDF2 = iconv.decode(pageInformation2.data, 'ISO-8859-1');
 
-        // Criar e salvar CSV
-        const csvWriter =
-          id > 0
-            ? createObjectCsvWriter({
-                path: path.resolve(tjmgPath, 'uploads', `08-02-22-${nameCSV}`),
-                header: headerListMG,
-                fieldDelimiter: ';',
-                encoding: 'latin1',
-                append: true,
-              })
-            : createObjectCsvWriter({
-                path: path.resolve(tjmgPath, 'uploads', `08-02-22-${nameCSV}`),
-                header: headerListMG,
-                fieldDelimiter: ';',
-                encoding: 'latin1',
-              });
+        const process = formatChronologicalList(
+          pagePDF,
+          pagePDF2,
+          id.toString(),
+        );
 
-        await csvWriter.writeRecords([process]);
+        const today = new Date();
+        const currentDate = `${today.getDate()}-${today.getMonth()}-${today.getFullYear()}-`;
+        const nameCSV = `${currentDate}${search.input.replace('/', '-')}.csv`;
 
-        const csvWriter2 =
-          init > 0
-            ? createObjectCsvWriter({
-                path: path.resolve(tjmgPath, 'lista.csv'),
-                header: headerListMG,
-                fieldDelimiter: ';',
-                encoding: 'latin1',
-                append: true,
-              })
-            : createObjectCsvWriter({
-                path: path.resolve(tjmgPath, 'lista.csv'),
-                header: headerListMG,
-                fieldDelimiter: ';',
-                encoding: 'latin1',
-              });
+        for (const acronyms of process.acronyms) {
+          const processSave: ITJMGList = {
+            chronologicalOrder: process.chronologicalOrder,
+            openSuspended: process.openSuspended,
+            value: process.value,
+            NProcess: process.NProcess,
+            NSEI: process.NSEI,
+            origin: process.origin,
+            action: process.action,
+            saleOff: process.saleOff,
+            protocolDateTime: process.protocolDateTime,
+            protocolNumberYear: process.protocolNumberYear,
+            acronyms: [acronyms],
+          };
+          const csvWriter =
+            id > 0
+              ? createObjectCsvWriter({
+                  path: path.resolve(tjmgPath, 'uploads', `${nameCSV}`),
+                  header: headerListMG,
+                  fieldDelimiter: ';',
+                  encoding: 'latin1',
+                  append: true,
+                })
+              : createObjectCsvWriter({
+                  path: path.resolve(tjmgPath, 'uploads', `${nameCSV}`),
+                  header: headerListMG,
+                  fieldDelimiter: ';',
+                  encoding: 'latin1',
+                });
 
-        await csvWriter2.writeRecords([process]);
+          await csvWriter.writeRecords([processSave]);
+        }
+
         if (init === 0) {
           init++;
         }
@@ -407,30 +439,71 @@ export class TjmgProvider implements ITjmgProvider {
 
         const pagePDF = iconv.decode(pageInformation.data, 'ISO-8859-1');
 
-        // Formatar Informações
-        const process = formatChronologicalList2(pagePDF, id.toString());
+        const pageInformation2 = await this.curl.post(
+          'http://www8.tjmg.jus.br/juridico/pe/listaCronologia.jsf',
+          {
+            POSTFIELDS: querystring.stringify({
+              'javax.faces.partial.ajax': 'true',
+              'javax.faces.source': `resultado:${id}:nprecatorio`,
+              'javax.faces.partial.execute': '@all',
+              'javax.faces.partial.render': 'frm_detalhe',
+              [`resultado:${id}:nprecatorio`]: `resultado:${id}:nprecatorio`,
+              frm_pesquisa: 'frm_pesquisa',
+              entidade_devedora_input: search.input,
+              entidade_devedora_hinput: search.hinput,
+              ocultaFechados_input: '1',
+              ocultaFechados_focus: '',
+              'javax.faces.ViewState': viewState,
+            }),
+            COOKIEJAR: this.cookiesPath,
+            COOKIEFILE: this.cookiesPath,
+          },
+        );
 
-        // Criar e salvar CSV
-        const nameCSV = `${search.input.replace('/', '-')}.csv`;
+        const pagePDF2 = iconv.decode(pageInformation2.data, 'ISO-8859-1');
 
-        // Criar e salvar CSV
-        const csvWriter =
-          id > 0
-            ? createObjectCsvWriter({
-                path: path.resolve(tjmgPath, 'uploads2', `08-02-22-${nameCSV}`),
-                header: headerListMG,
-                fieldDelimiter: ';',
-                encoding: 'latin1',
-                append: true,
-              })
-            : createObjectCsvWriter({
-                path: path.resolve(tjmgPath, 'uploads2', `08-02-22-${nameCSV}`),
-                header: headerListMG,
-                fieldDelimiter: ';',
-                encoding: 'latin1',
-              });
+        const process = formatChronologicalList2(
+          pagePDF,
+          pagePDF2,
+          id.toString(),
+        );
 
-        await csvWriter.writeRecords([process]);
+        const today = new Date();
+        const currentDate = `${today.getDate()}-${today.getMonth()}-${today.getFullYear()}-`;
+        const nameCSV = `${currentDate}${search.input.replace('/', '-')}.csv`;
+
+        for (const acronyms of process.acronyms) {
+          const processSave: ITJMGList = {
+            chronologicalOrder: process.chronologicalOrder,
+            openSuspended: process.openSuspended,
+            value: process.value,
+            NProcess: process.NProcess,
+            NSEI: process.NSEI,
+            origin: process.origin,
+            action: process.action,
+            saleOff: process.saleOff,
+            protocolDateTime: process.protocolDateTime,
+            protocolNumberYear: process.protocolNumberYear,
+            acronyms: [acronyms],
+          };
+          const csvWriter =
+            id > 0
+              ? createObjectCsvWriter({
+                  path: path.resolve(tjmgPath, 'uploads', `${nameCSV}`),
+                  header: headerListMG,
+                  fieldDelimiter: ';',
+                  encoding: 'latin1',
+                  append: true,
+                })
+              : createObjectCsvWriter({
+                  path: path.resolve(tjmgPath, 'uploads', `${nameCSV}`),
+                  header: headerListMG,
+                  fieldDelimiter: ';',
+                  encoding: 'latin1',
+                });
+
+          await csvWriter.writeRecords([processSave]);
+        }
       }
     }
   }

@@ -65,7 +65,7 @@ export class TjrsProvider implements ITjrsProvider {
     let debtorIndex = 0;
     for (const nameDebtor of namesDebtor) {
       debtorIndex++;
-      if (debtorIndex > 582) {
+      if (debtorIndex > 0) {
         console.log(nameDebtor.name);
         console.log(debtorIndex);
         await this.curl.get(
@@ -123,7 +123,6 @@ export class TjrsProvider implements ITjrsProvider {
         }
         let pageId = 1;
         let index = 1;
-      // if (debtorIndex > 106) {
         for (const numberPage of numberPages) {
           if (numberPage !== '1') {
             pageId += 100;
@@ -292,7 +291,13 @@ export class TjrsProvider implements ITjrsProvider {
                 replaceStringForHTMLaccentuation(localization);
               process.position = replaceStringForHTMLaccentuation(position);
 
-              const nameCSV = `${nameDebtor.name.replace('/', '-')}.csv`;
+              const today = new Date();
+              const currentDate = `${today.getDate()}-${today.getMonth()}-${today.getFullYear()}-`;
+              const nameCSV = `${currentDate}${nameDebtor.name.replace(
+                '/',
+                '-',
+              )}.csv`;
+
               const csvWriter =
                 index > 1
                   ? createObjectCsvWriter({

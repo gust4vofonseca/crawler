@@ -14,4 +14,5 @@ export interface ITJMGList {
   saleOff: string;
   protocolDateTime: string;
   protocolNumberYear: string;
+  acronyms: Array<string>;
 }
