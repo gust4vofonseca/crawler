@@ -198,7 +198,7 @@ export function formatChronologicalList2(
 
   const acronyms = [];
   if (data2.includes(`Beneficiários`)) {
-    const getBene = data2.split(`j_idt147" class="ui-outputlabel">`);
+    const getBene = data2.split(`j_idt149" class="ui-outputlabel">`);
     let i = 0;
     for (const getData of getBene) {
       if (i > 0) {

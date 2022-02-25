@@ -10,6 +10,7 @@ import {
 } from '@modules/tjs/utils/formatTJMGProcess';
 import { headerListMG } from '@modules/tjs/utils/csvHeadersTJMG';
 import { createObjectCsvWriter } from 'csv-writer';
+import fs from 'fs';
 import { ITjmgProvider } from '../models/ITjmgProvider';
 
 export class TjmgProvider implements ITjmgProvider {
@@ -26,8 +27,7 @@ export class TjmgProvider implements ITjmgProvider {
         : curly.create({ SSL_VERIFYPEER: false });
   }
 
-  async searchByChronologicalList(): Promise<void> {
-    console.log('Aqui');
+  async searchByChronologicalListEntity(): Promise<void> {
     const pageInitial = await this.curl.get(
       'http://www8.tjmg.jus.br/juridico/pe/consultaPorEntidadeDevedora.jsf',
       {
@@ -247,7 +247,9 @@ export class TjmgProvider implements ITjmgProvider {
         );
 
         const today = new Date();
-        const currentDate = `${today.getDate()}-${today.getMonth()}-${today.getFullYear()}-`;
+        const currentDate = `${today.getDate()}-${
+          today.getMonth() + 1
+        }-${today.getFullYear()}-`;
         const nameCSV = `${currentDate}${search.input.replace('/', '-')}.csv`;
 
         for (const acronyms of process.acronyms) {
@@ -267,14 +269,14 @@ export class TjmgProvider implements ITjmgProvider {
           const csvWriter =
             id > 0
               ? createObjectCsvWriter({
-                  path: path.resolve(tjmgPath, 'uploads', `${nameCSV}`),
+                  path: path.resolve(tjmgPath, 'entity', `${nameCSV}`),
                   header: headerListMG,
                   fieldDelimiter: ';',
                   encoding: 'latin1',
                   append: true,
                 })
               : createObjectCsvWriter({
-                  path: path.resolve(tjmgPath, 'uploads', `${nameCSV}`),
+                  path: path.resolve(tjmgPath, 'entity', `${nameCSV}`),
                   header: headerListMG,
                   fieldDelimiter: ';',
                   encoding: 'latin1',
@@ -290,7 +292,7 @@ export class TjmgProvider implements ITjmgProvider {
     }
   }
 
-  async searchByChronologicalList2(): Promise<void> {
+  async searchByChronologicalListPayment(): Promise<void> {
     const pageInitial = await this.curl.get(
       'http://www8.tjmg.jus.br/juridico/pe/listaCronologia.jsf',
       {
@@ -462,14 +464,26 @@ export class TjmgProvider implements ITjmgProvider {
 
         const pagePDF2 = iconv.decode(pageInformation2.data, 'ISO-8859-1');
 
+        await fs.promises.writeFile(
+          path.resolve(tjmgPath, 'paginaPDFs.html'),
+          pagePDF2,
+          {
+            encoding: 'utf8',
+          },
+        );
+
         const process = formatChronologicalList2(
           pagePDF,
           pagePDF2,
           id.toString(),
         );
 
+        console.log(process);
+
         const today = new Date();
-        const currentDate = `${today.getDate()}-${today.getMonth()}-${today.getFullYear()}-`;
+        const currentDate = `${today.getDate()}-${
+          today.getMonth() + 1
+        }-${today.getFullYear()}-`;
         const nameCSV = `${currentDate}${search.input.replace('/', '-')}.csv`;
 
         for (const acronyms of process.acronyms) {
@@ -489,14 +503,14 @@ export class TjmgProvider implements ITjmgProvider {
           const csvWriter =
             id > 0
               ? createObjectCsvWriter({
-                  path: path.resolve(tjmgPath, 'uploads', `${nameCSV}`),
+                  path: path.resolve(tjmgPath, 'payment', `${nameCSV}`),
                   header: headerListMG,
                   fieldDelimiter: ';',
                   encoding: 'latin1',
                   append: true,
                 })
               : createObjectCsvWriter({
-                  path: path.resolve(tjmgPath, 'uploads', `${nameCSV}`),
+                  path: path.resolve(tjmgPath, 'payment', `${nameCSV}`),
                   header: headerListMG,
                   fieldDelimiter: ';',
                   encoding: 'latin1',
