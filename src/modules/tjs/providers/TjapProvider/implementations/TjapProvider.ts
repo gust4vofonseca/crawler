@@ -28,13 +28,9 @@ export class TjapProvider implements ITjapProvider {
   // Lista cronologica
 
   async searchByChronologicalList(): Promise<void> {
-    const data = await this.curl.post(
-      'https://sig.tjap.jus.br/sgpe_control_lista_precatorios/sgpe_control_lista_precatorios.php?script_case_init=9075',
+    const data = await this.curl.get(
+      'https://sig.tjap.jus.br/sgpe_control_lista_precatorios/sgpe_control_lista_precatorios.php',
       {
-        POSTFIELDS: querystring.stringify({
-          script_case_init: '9075',
-          script_case_session: 'iu103u56m2jfbeiv079et7aea3',
-        }),
         COOKIEJAR: this.cookiesPath,
         COOKIEFILE: this.cookiesPath,
       },
@@ -51,8 +47,6 @@ export class TjapProvider implements ITjapProvider {
     const [caseInit] = getCase.split(`"`);
 
     for (let i = 1; i <= 6; i++) {
-      console.log(i);
-      console.log(session, caseInit);
       const data3 = await this.curl.post(
         'https://sig.tjap.jus.br/sgpe_grid_lista_precatorios/sgpe_grid_lista_precatorios.php',
         {
@@ -62,10 +56,18 @@ export class TjapProvider implements ITjapProvider {
             nmgp_url_saida:
               '/sgpe_control_lista_precatorios/sgpe_control_lista_precatorios.php',
             script_case_init: caseInit,
-            script_case_session: 'iu103u56m2jfbeiv079et7aea3',
+            script_case_session: session,
           }),
           COOKIEJAR: this.cookiesPath,
           COOKIEFILE: this.cookiesPath,
+        },
+      );
+
+      await fs.promises.writeFile(
+        path.resolve(tjapPath, 'paginaPDFs.html'),
+        data3.data,
+        {
+          encoding: 'utf8',
         },
       );
 
