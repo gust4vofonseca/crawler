@@ -14,4 +14,5 @@ export interface ITJRSList {
   correspondingBudget: string;
   localization: string;
   position: string;
+  currentSituation: string;
 }

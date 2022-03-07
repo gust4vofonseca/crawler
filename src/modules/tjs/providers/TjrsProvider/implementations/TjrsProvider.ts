@@ -62,12 +62,12 @@ export class TjrsProvider implements ITjrsProvider {
       i++;
     }
 
-    let debtorIndex = 0;
+    let debtorIndex = 1;
     for (const nameDebtor of namesDebtor) {
       debtorIndex++;
-      if (debtorIndex > 0) {
+      console.log(debtorIndex);
+      if (debtorIndex > 39) {
         console.log(nameDebtor.name);
-        console.log(debtorIndex);
         await this.curl.get(
           'https://www.tjrs.jus.br/novo/processos-e-servicos/precatorios-e-rpv/pesquisa-de-precatorios/',
           {
@@ -121,24 +121,24 @@ export class TjrsProvider implements ITjrsProvider {
         ) {
           numberPages.push('1');
         }
-        let pageId = 1;
-        let index = 1;
+        let pageId = 28501;
+        let index = 2;
         for (const numberPage of numberPages) {
-          if (numberPage !== '1') {
-            pageId += 100;
-            const name = nameDebtor.name.replace(/\+/g, '');
-            const dataPageChange = await this.curl.get(
-              `https://www.tjrs.jus.br/site_php/precatorios/lista_precatorios_entidades.php?cod_devedor=${nameDebtor.entity}&seq=${pageId}&incremento_de_seq=100&entidade=${nameDebtor.entity}&nome_entidade=${name}&qtd_precatorios=${numberPrecatories}`,
-              {
-                COOKIEJAR: this.cookiesPath,
-                COOKIEFILE: this.cookiesPath,
-              },
-            );
-            dataPage = replaceStringForHTMLaccentuation(
-              dataPageChange.data.toString(),
-            );
-          }
           console.log(pageId);
+          // if (numberPage !== '1') {
+          pageId += 100;
+          const name = nameDebtor.name.replace(/\+/g, '');
+          const dataPageChange = await this.curl.get(
+            `https://www.tjrs.jus.br/site_php/precatorios/lista_precatorios_entidades.php?cod_devedor=${nameDebtor.entity}&seq=${pageId}&incremento_de_seq=100&entidade=${nameDebtor.entity}&nome_entidade=${name}&qtd_precatorios=${numberPrecatories}`,
+            {
+              COOKIEJAR: this.cookiesPath,
+              COOKIEFILE: this.cookiesPath,
+            },
+          );
+          dataPage = replaceStringForHTMLaccentuation(
+            dataPageChange.data.toString(),
+          );
+          // }
 
           let pageInformation = [];
           if (dataPage.includes(`<div align="center"><a href="`)) {
@@ -164,6 +164,7 @@ export class TjrsProvider implements ITjrsProvider {
                 correspondingBudget: '',
                 localization: '',
                 position: '',
+                currentSituation: '',
               };
 
               const [getHref, getNumberProcess] = info.split(`">`);
@@ -257,9 +258,16 @@ export class TjrsProvider implements ITjrsProvider {
                 [correspondingBudget] = getData.split(`<`);
               }
 
+              let currentSituation = '';
+              if (dat.includes(`Atual:`)) {
+                const [, getdata] = dat.split(`Atual:`);
+                const [, getData] = getdata.split(`<td width="50%">`);
+                [currentSituation] = getData.split(`<`);
+              }
+
               let localization = '';
-              if (dat.includes(`Correspondente`)) {
-                const [, getdata] = dat.split(`Correspondente`);
+              if (dat.includes(`Localiza`)) {
+                const [, getdata] = dat.split(`Localiza`);
                 const [, getData] = getdata.split(`<td width="50%">`);
                 [localization] = getData.split(`<`);
               }
@@ -270,6 +278,7 @@ export class TjrsProvider implements ITjrsProvider {
                 const [, getData] = getdata.split(`<td>`);
                 [position] = getData.split(`<`);
               }
+
               process.NProcess =
                 replaceStringForHTMLaccentuation(numberProcess);
               process.court = replaceStringForHTMLaccentuation(court);
@@ -290,6 +299,8 @@ export class TjrsProvider implements ITjrsProvider {
               process.localization =
                 replaceStringForHTMLaccentuation(localization);
               process.position = replaceStringForHTMLaccentuation(position);
+              process.currentSituation =
+                replaceStringForHTMLaccentuation(currentSituation);
 
               const today = new Date();
               const currentDate = `${today.getDate()}-${today.getMonth()}-${today.getFullYear()}-`;
@@ -301,30 +312,22 @@ export class TjrsProvider implements ITjrsProvider {
               const csvWriter =
                 index > 1
                   ? createObjectCsvWriter({
-                      path: path.resolve(
-                        tjrsPath,
-                        'uploads',
-                        `08-02-22-${nameCSV}`,
-                      ),
+                      path: path.resolve(tjrsPath, 'uploads', `${nameCSV}`),
                       header: headerListRS,
                       fieldDelimiter: ';',
                       encoding: 'latin1',
                       append: true,
                     })
                   : createObjectCsvWriter({
-                      path: path.resolve(
-                        tjrsPath,
-                        'uploads',
-                        `08-02-22-${nameCSV}`,
-                      ),
+                      path: path.resolve(tjrsPath, 'uploads', `${nameCSV}`),
                       header: headerListRS,
                       fieldDelimiter: ';',
                       encoding: 'latin1',
                     });
 
               await csvWriter.writeRecords([process]);
+              index++;
             }
-            index++;
             id++;
           }
         }

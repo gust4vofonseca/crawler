@@ -29,8 +29,39 @@ export class TjapProvider implements ITjapProvider {
 
   async searchByChronologicalList(): Promise<void> {
     const data = await this.curl.get(
-      'https://sig.tjap.jus.br/sgpe_control_lista_precatorios/sgpe_control_lista_precatorios.php',
+      'https://sig.tjap.jus.br/sgpe_control_lista_precatorios/',
       {
+        HTTPHEADER: [
+          querystring.stringify({
+            'User-Agent':
+              'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0',
+            Accept:
+              'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+            'Accept-Language': 'pt-BR,pt;q=0.8,en-US;q=0.5,en;q=0.3',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            Connection: 'keep-alive',
+          }),
+        ],
+        COOKIEJAR: this.cookiesPath,
+        COOKIEFILE: this.cookiesPath,
+      },
+    );
+    await this.curl.get(
+      'https://sig.tjap.jus.br/_lib/prod/third/jquery_plugin/thickbox/thickbox-compressed.js',
+      {
+        HTTPHEADER: [
+          querystring.stringify({
+            'User-Agent':
+              'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0',
+            Accept:
+              'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+            'Accept-Language': 'pt-BR,pt;q=0.8,en-US;q=0.5,en;q=0.3',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            Connection: 'keep-alive',
+          }),
+        ],
         COOKIEJAR: this.cookiesPath,
         COOKIEFILE: this.cookiesPath,
       },
@@ -58,6 +89,19 @@ export class TjapProvider implements ITjapProvider {
             script_case_init: caseInit,
             script_case_session: session,
           }),
+          HTTPHEADER: [
+            querystring.stringify({
+              'User-Agent':
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0',
+              Accept:
+                'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+              'Accept-Language': 'pt-BR,pt;q=0.8,en-US;q=0.5,en;q=0.3',
+              'Accept-Encoding': 'gzip, deflate, br',
+              'Content-Type':
+                'application/x-www-form-urlencoded; charset=UTF-8',
+              Connection: 'keep-alive',
+            }),
+          ],
           COOKIEJAR: this.cookiesPath,
           COOKIEFILE: this.cookiesPath,
         },
@@ -83,7 +127,17 @@ export class TjapProvider implements ITjapProvider {
             script_case_session: 'iu103u56m2jfbeiv079et7aea3',
           }),
           HTTPHEADER: [
-            'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:94.0) Gecko/20100101 Firefox/94.0',
+            querystring.stringify({
+              'User-Agent':
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0',
+              Accept:
+                'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+              'Accept-Language': 'pt-BR,pt;q=0.8,en-US;q=0.5,en;q=0.3',
+              'Accept-Encoding': 'gzip, deflate, br',
+              'Content-Type':
+                'application/x-www-form-urlencoded; charset=UTF-8',
+              Connection: 'keep-alive',
+            }),
           ],
           COOKIEJAR: this.cookiesPath,
           COOKIEFILE: this.cookiesPath,

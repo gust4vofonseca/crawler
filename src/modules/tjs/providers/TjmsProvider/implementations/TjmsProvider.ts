@@ -49,10 +49,10 @@ export class TjmsProvider implements ITjmsProvider {
     const [, getLink] = page.data.toString().split(`id="formPesquisa"`);
     const [link] = getLink.split(`"`);
 
-    console.log(link);
+    console.log({ link });
 
     const processPage = await this.curl.post(
-      'https://www.tjms.jus.br/sapre/publico/classificacao.xhtml;jsessionid=dW9D8HLlyuqYKr-2xqa-m7HTBnzsnqbvMjW4bzNX.srv-jee-slave05',
+      'https://www.tjms.jus.br/sapre/publico/classificacao.xhtml',
       {
         POSTFIELDS: querystring.stringify({
           'javax.faces.partial.ajax': 'true',
@@ -82,7 +82,7 @@ export class TjmsProvider implements ITjmsProvider {
 
     await fs.promises.writeFile(
       path.resolve(tjmsPath, 'paginaPDFs.html'),
-      page.data,
+      processPage.data,
       {
         encoding: 'utf8',
       },

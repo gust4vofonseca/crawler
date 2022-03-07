@@ -21,13 +21,13 @@ const tjroListController = new TjroListController();
 const tjapListController = new TjapListController();
 const tjmsListController = new TjmsListController();
 
-tjsRouter.get('/minas_gerais', tjmgListController.handle);
+tjsRouter.get('/mg', tjmgListController.handle);
 
 tjsRouter.get('/ma', tjmaListController.handle);
 
-tjsRouter.get('/rio_grande_do_sul', tjrsListController.handle);
+tjsRouter.get('/rs', tjrsListController.handle);
 
-tjsRouter.post('/ms', uploadTjms.single('file'), tjmsListController.handle);
+tjsRouter.get('/ms', tjmsListController.handle);
 
 tjsRouter.get('/ro', tjroListController.handle);
 

@@ -12,6 +12,7 @@ export const headerListRS = [
   { id: 'lawyers', title: 'Advogado(s):' },
   { id: 'object', title: 'Objeto:' },
   { id: 'correspondingBudget', title: 'Orçamento Correspondente:' },
+  { id: 'currentSituation', title: 'Situação atual' },
   { id: 'localization', title: 'Localização' },
   { id: 'position', title: 'Posição na Fila' },
 ];
