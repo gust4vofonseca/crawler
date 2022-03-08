@@ -12,6 +12,8 @@ export const tjmsPath = path.resolve(__dirname, '..', '..', 'tjs', 'ms');
 
 export const tjrsPath = path.resolve(__dirname, '..', '..', 'tjs', 'rs');
 
+export const tjrrPath = path.resolve(__dirname, '..', '..', 'tjs', 'rr');
+
 export const tjroPath = path.resolve(__dirname, '..', '..', 'tjs', 'ro');
 
 export const tjapPath = path.resolve(__dirname, '..', '..', 'tjs', 'ap');

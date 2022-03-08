@@ -1,15 +1,15 @@
 import { ICSVProvider } from '@modules/files/providers/models/ICSVProvider';
 import { IProcessFilesRepository } from '@modules/files/repositories/IProcessFilesRepository';
-import { ITjrsProvider } from '../providers/TjrsProvider/models/ITjrsProvider';
+import { ITjrrProvider } from '../providers/TjrrProvider/models/ITjrrProvider';
 
-export class TjrsListService {
+export class TjrrListService {
   constructor(
     private processFilesRepository: IProcessFilesRepository,
-    private tjrsProvider: ITjrsProvider,
+    private tjrrProvider: ITjrrProvider,
     private csvProvider: ICSVProvider,
   ) {}
 
   async execute(): Promise<void> {
-    await this.tjrsProvider.searchByChronologicalList();
+    await this.tjrrProvider.searchByChronologicalList();
   }
 }
