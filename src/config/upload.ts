@@ -18,6 +18,8 @@ export const tjroPath = path.resolve(__dirname, '..', '..', 'tjs', 'ro');
 
 export const tjapPath = path.resolve(__dirname, '..', '..', 'tjs', 'ap');
 
+export const tjamPath = path.resolve(__dirname, '..', '..', 'tjs', 'am');
+
 export const tjmaPath = path.resolve(__dirname, '..', '..', 'tjs', 'ma');
 
 export function tjmgUploadConfig(): tjUploadConfig {

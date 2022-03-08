@@ -10,6 +10,7 @@ import { TjrrListController } from '../controllers/TjrrListController';
 import { TjmsListController } from '../controllers/TjmsListController';
 import { TjroListController } from '../controllers/TjroListController';
 import { TjapListController } from '../controllers/TjapListController';
+import { TjamListController } from '../controllers/TjamListController';
 
 const tjsRouter = Router();
 
@@ -21,6 +22,7 @@ const tjrsListController = new TjrsListController();
 const tjrrListController = new TjrrListController();
 const tjroListController = new TjroListController();
 const tjapListController = new TjapListController();
+const tjamListController = new TjamListController();
 const tjmsListController = new TjmsListController();
 
 tjsRouter.get('/mg', tjmgListController.handle);
@@ -36,5 +38,7 @@ tjsRouter.get('/ms', tjmsListController.handle);
 tjsRouter.get('/ro', tjroListController.handle);
 
 tjsRouter.get('/ap', tjapListController.handle);
+
+tjsRouter.get('/am', tjamListController.handle);
 
 export { tjsRouter };

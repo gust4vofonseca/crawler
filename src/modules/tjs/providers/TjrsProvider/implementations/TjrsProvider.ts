@@ -66,7 +66,7 @@ export class TjrsProvider implements ITjrsProvider {
     for (const nameDebtor of namesDebtor) {
       debtorIndex++;
       console.log(debtorIndex);
-      if (debtorIndex > 39) {
+      if (debtorIndex > 109) {
         console.log(nameDebtor.name);
         await this.curl.get(
           'https://www.tjrs.jus.br/novo/processos-e-servicos/precatorios-e-rpv/pesquisa-de-precatorios/',
@@ -121,24 +121,24 @@ export class TjrsProvider implements ITjrsProvider {
         ) {
           numberPages.push('1');
         }
-        let pageId = 28501;
-        let index = 2;
+        let pageId = 1;
+        let index = 1;
         for (const numberPage of numberPages) {
           console.log(pageId);
-          // if (numberPage !== '1') {
-          pageId += 100;
-          const name = nameDebtor.name.replace(/\+/g, '');
-          const dataPageChange = await this.curl.get(
-            `https://www.tjrs.jus.br/site_php/precatorios/lista_precatorios_entidades.php?cod_devedor=${nameDebtor.entity}&seq=${pageId}&incremento_de_seq=100&entidade=${nameDebtor.entity}&nome_entidade=${name}&qtd_precatorios=${numberPrecatories}`,
-            {
-              COOKIEJAR: this.cookiesPath,
-              COOKIEFILE: this.cookiesPath,
-            },
-          );
-          dataPage = replaceStringForHTMLaccentuation(
-            dataPageChange.data.toString(),
-          );
-          // }
+          if (numberPage !== '1') {
+            pageId += 100;
+            const name = nameDebtor.name.replace(/\+/g, '');
+            const dataPageChange = await this.curl.get(
+              `https://www.tjrs.jus.br/site_php/precatorios/lista_precatorios_entidades.php?cod_devedor=${nameDebtor.entity}&seq=${pageId}&incremento_de_seq=100&entidade=${nameDebtor.entity}&nome_entidade=${name}&qtd_precatorios=${numberPrecatories}`,
+              {
+                COOKIEJAR: this.cookiesPath,
+                COOKIEFILE: this.cookiesPath,
+              },
+            );
+            dataPage = replaceStringForHTMLaccentuation(
+              dataPageChange.data.toString(),
+            );
+          }
 
           let pageInformation = [];
           if (dataPage.includes(`<div align="center"><a href="`)) {
