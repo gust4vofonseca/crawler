@@ -9,10 +9,10 @@ import { createObjectCsvWriter } from 'csv-writer';
 import { replaceStringForHTMLaccentuation } from '@modules/tjs/utils/replaceStringForHTMLaccentuation';
 import { ITJRRList } from '@modules/tjs/dtos/ITJRRProcess';
 import { headerListRR } from '@modules/tjs/utils/csvHeadersTjRR';
-import { ITjrrProvider } from '../models/ITjrrProvider';
 import fs from 'fs';
 import PDFParser from 'pdf2json';
 import LeadsAppError from '@shared/errors/LeadsAppError';
+import { ITjrrProvider } from '../models/ITjrrProvider';
 
 export class TjrrProvider implements ITjrrProvider {
   private curl: CurlyFunction;
@@ -47,20 +47,19 @@ export class TjrrProvider implements ITjrrProvider {
       },
     );
 
-    const data = await this.readPdf(
+    const dataPdf = await this.readPdf(
       path.resolve(tjrrPath, 'paginaPDFs.pdf'),
     );
 
-
-    const lines = data.split(`\n`);
+    const lines = dataPdf.split(`\n`);
 
     let id = 0;
     for (let i = 0; i < lines.length; i++) {
       if (lines[i].includes(`º`)) {
         let data = '';
-        if(lines[i].match(/\d{7}-\d{2}.\d{4}.\d{1}.\d{2}.\d{4}/)) {
+        if (lines[i].match(/\d{7}-\d{2}.\d{4}.\d{1}.\d{2}.\d{4}/)) {
           data = lines[i];
-        } else if (lines[i + 1].match(/\d{7}-\d{2}.\d{4}.\d{1}.\d{2}.\d{4}/)){
+        } else if (lines[i + 1].match(/\d{7}-\d{2}.\d{4}.\d{1}.\d{2}.\d{4}/)) {
           data = `${lines[i]} ${lines[i + 1]}`;
         }
 
@@ -87,9 +86,9 @@ export class TjrrProvider implements ITjrrProvider {
             Ncnj2 = Ncnj1;
           }
 
-
-
-          const [nature] = data.match(/Alimentar|Comum|preferencial|Alterado para comum/);
+          const [nature] = data.match(
+            /Alimentar|Comum|preferencial|Alterado para comum/,
+          );
 
           let [, value] = data.split(Ncnj2);
           if (Ncnj2.match(/QUITADO/)) {
@@ -97,13 +96,11 @@ export class TjrrProvider implements ITjrrProvider {
             Ncnj2.replace('QUITADO', '');
           }
 
-
-
           value = value.replace(/\r/, '');
 
           let nPrecatory = '';
 
-          let [getNumber] = data.split(Ncnj1);
+          const [getNumber] = data.split(Ncnj1);
 
           if (getNumber.match(/\d{4}\/\d{6}/)) {
             [nPrecatory] = getNumber.match(/\d{4}\/\d{6}/);
@@ -126,7 +123,7 @@ export class TjrrProvider implements ITjrrProvider {
             Ncnj2,
             nature,
             value,
-            nPrecatory
+            nPrecatory,
           };
 
           const dir = path.resolve(tjrrPath, 'uploads', 'listaRR.csv');
@@ -150,9 +147,9 @@ export class TjrrProvider implements ITjrrProvider {
           await csvWriter.writeRecords([process]);
           id++;
         }
-        }
       }
     }
+  }
 
   async readPdf(pdf_path: string): Promise<string> {
     const pdfParser = new PDFParser(this, 1);
@@ -179,5 +176,4 @@ export class TjrrProvider implements ITjrrProvider {
 
     return pdfData;
   }
-
 }

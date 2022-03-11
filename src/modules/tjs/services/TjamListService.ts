@@ -11,5 +11,6 @@ export class TjamListService {
 
   async execute(): Promise<void> {
     await this.tjamProvider.searchByChronologicalList();
+    console.log('Serveice');
   }
 }
