@@ -14,6 +14,7 @@ import LeadsAppError from '@shared/errors/LeadsAppError';
 import Tesseract from 'tesseract.js';
 import { replaceStringForHTMLaccentuation } from '@modules/tjs/utils/replaceStringForHTMLaccentuation';
 import iconv from 'iconv-lite';
+import ocr from 'ocr';
 import { ITjamProvider } from '../models/ITjamProvider';
 
 export class TjamProvider implements ITjamProvider {
@@ -134,8 +135,7 @@ export class TjamProvider implements ITjamProvider {
         index++;
       }
     } */
-
-    await this.readImage()
+    await this.readImageOcrWeb();
   }
 
   async readPdf(pdf_path: string): Promise<string> {
@@ -184,6 +184,50 @@ export class TjamProvider implements ITjamProvider {
       return 'ljksdfahn';
     } catch (error) {
       throw new LeadsAppError(`ReadImage - Msg: ${error.message}`, 400, 'TJAM');
+    }
+  }
+
+  async readImageOcrWeb(): Promise<void> {
+    try {
+      /* const siteOcr = await this.curl.get(`https://www.onlineocr.net/pt/`, {
+        COOKIEJAR: this.cookiesPath,
+        COOKIEFILE: this.cookiesPath,
+      });
+
+      const image = fs.readFileSync(
+        path.resolve(
+          tjamPath,
+          'uploads',
+          'images2',
+          'paginaPDFs_page-0001.jpg',
+        ),
+      ); */
+      const Ocr = await this.curl.get(
+        `http(s)://www.ocrwebservice.com/restservices/processDocument`,
+        {
+          postFields: querystring.stringify({
+            'Content-Type': 'application/json',
+            'Content-Length': 'nnn',
+            OCRErrorMessage: 'Recognition result has not been specified',
+            AvailablePages: 287848,
+            ProcessedPages: 0,
+            OCRText: [],
+            OutputFileUrl: '',
+            TaskDescription: '',
+            Reserved: [],
+          }),
+          COOKIEJAR: this.cookiesPath,
+          COOKIEFILE: this.cookiesPath,
+        },
+      );
+
+      ocr.recognize();
+    } catch (error) {
+      throw new LeadsAppError(
+        `readImageOcrWeb - Msg: ${error.message}`,
+        400,
+        'TJAM',
+      );
     }
   }
 }
